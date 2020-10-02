@@ -6,12 +6,14 @@ import { Redirect, Switch, useLocation} from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 
+import './App.css';
 
 
 // const Login = lazy(() => import('./views/Login'));
 const Signup = lazy(() => import('./views/Signup'));
 
 const Login = lazy(() => import('./views/Login'));
+
 
 function App() {
   const location = useLocation();

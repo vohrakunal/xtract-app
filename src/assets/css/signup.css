@@ -1,0 +1,43 @@
+.speechify-header-icon{
+    height: 12rem;
+    margin-top:4rem;
+}
+.speechify-login{
+    text-align: left;
+    margin: 5rem 0rem 1rem 0rem;
+    width: 85%;
+    height: auto;
+    padding: 2rem 2rem 2rem 2rem;
+    display: inline-block;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 1px 11px 0px #f1f1f1;
+    -moz-box-shadow: 0px 1px 11px 0px #f1f1f1;
+    box-shadow: 0px 1px 11px 0px #e8e8e8;
+    background-color: #ffffff;
+}
+
+.speechify-login label{
+    color:#412d98;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.speechify-login input{
+    height: 3rem;
+    background-color: #f7f7f7;
+    border: none;
+}
+.speechify-login button {
+    height: 3rem;
+    background: #412d98;
+    color:#F4F9E9;
+    border: none;
+}
+
+.speechify-login button:hover{
+    background-color: #838B9A;
+}
+body{
+    background: #a8c0ff; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #a8c0ff, #3f2b96); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8c0ff, #3f2b96); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
