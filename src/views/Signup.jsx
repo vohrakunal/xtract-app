@@ -1,7 +1,10 @@
 
 import React from 'react';
 
-import { Container, Form, Button, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
+
+import { Container, Form, Button, Image, Alert } from 'react-bootstrap';
 
 import "../assets/css/signup.css";
 
@@ -10,7 +13,17 @@ import SpeechIcon from "../assets/icons/public-speaking.svg";
 import axios from 'axios';
 class Signup extends React.Component {
 
+    state = {};
 
+    messageBox = () => {
+        if (this.state.msgShow) {
+            return (
+                <Alert variant={this.state.variant} onClose={() => this.setState({ msgShow: false })} dismissible>
+                    {this.state.msg}
+                </Alert>
+            );
+        }
+    }
 
     signupFormUpdate = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -28,13 +41,20 @@ class Signup extends React.Component {
                     password: this.state.password
                 }
             }).then(res=>{
-                console.log(res.data)
+                if(res.data.successmsg){
+                    this.setState({ msgShow: true, variant: "success", msg: res.data.successmsg })
+                }
+                if(res.data.errmsg){
+                    this.setState({ msgShow: true, variant: "danger", msg: res.data.errmsg })
+                }
+
             }).catch(err=>{
-                console.log(err)
+                this.setState({ msgShow: true, variant: "danger", msg: err })
+
             })
         }
         else{
-            console.log("passwords donot match")
+            this.setState({ msgShow: true, variant: "danger", msg: "Passwords Donot Match!" })
         }
         
     }
@@ -42,7 +62,8 @@ class Signup extends React.Component {
     render() {
         return (
             <div>
-                <Container className="text-center">
+                <Container className="text-center speechify-signup-container">
+                    {this.messageBox()}
                     <Image className="speechify-header-icon" src={SpeechIcon}/>
 
                 <div className="speechify-login text-secondary">
@@ -69,6 +90,9 @@ class Signup extends React.Component {
                         <Button variant="primary" type="submit" onClick={()=>this.onBtnClick()}>
                             Get On Board!
                         </Button>
+                        <div class="mt-2">
+                            Already Signedup? <Link to="/login">Login Now!</Link>
+                        </div>
                     
                 </div>
                     
