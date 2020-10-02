@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://localhost:3000/signup -->
+<html lang="en"><script>
+    window[Symbol.for('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign')] = new (class PostClient {
+            constructor(name, destination) {
+                this.name = name, this.destination = destination, this.serverListeners = {}, this.bgRequestsListeners = {}, 
+                this.bgEventsListeners = {}, window.addEventListener("message", message => {
+                    const data = message.data, isNotForMe = !(data.destination && data.destination === this.name), hasNotEventProp = !data.event;
+                    if (!isNotForMe && !hasNotEventProp) if ("MARIO_POST_SERVER__BG_RESPONSE" === data.event) {
+                        const response = data.args;
+                        if (this.hasBgRequestListener(response.requestId)) {
+                            try {
+                                this.bgRequestsListeners[response.requestId](response.response);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                            delete this.bgRequestsListeners[response.requestId];
+                        }
+                    } else if ("MARIO_POST_SERVER__BG_EVENT" === data.event) {
+                        const response = data.args;
+                        if (this.hasBgEventListener(response.event)) try {
+                            this.bgEventsListeners[data.id](response.payload);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } else if (this.hasServerListener(data.event)) try {
+                        this.serverListeners[data.event](data.args);
+                    } catch (e) {
+                        console.log(e);
+                    } else console.log("event not handled: " + data.event);
+                });
+            }
+            emitToServer(event, args) {
+                const id = this.generateUIID(), message = {
+                    args: args,
+                    destination: this.destination,
+                    event: event,
+                    id: id
+                };
+                return window.postMessage(message, location.origin), id;
+            }
+            emitToBg(bgEventName, args) {
+                const requestId = this.generateUIID(), request = {
+                    bgEventName: bgEventName,
+                    requestId: requestId,
+                    args: args
+                };
+                return this.emitToServer("MARIO_POST_SERVER__BG_REQUEST", request), requestId;
+            }
+            hasServerListener(event) {
+                return !!this.serverListeners[event];
+            }
+            hasBgRequestListener(requestId) {
+                return !!this.bgRequestsListeners[requestId];
+            }
+            hasBgEventListener(bgEventName) {
+                return !!this.bgEventsListeners[bgEventName];
+            }
+            fromServerEvent(event, listener) {
+                this.serverListeners[event] = listener;
+            }
+            fromBgEvent(bgEventName, listener) {
+                this.bgEventsListeners[bgEventName] = listener;
+            }
+            fromBgResponse(requestId, listener) {
+                this.bgRequestsListeners[requestId] = listener;
+            }
+            generateUIID() {
+                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (function(c) {
+                    const r = 16 * Math.random() | 0;
+                    return ("x" === c ? r : 3 & r | 8).toString(16);
+                }));
+            }
+        })('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign', 'MARIO_POST_SERVER_almalgbpmcfpdaopimbdchdliminoign')</script><script>
+    const hideMyLocation = new (class HideMyLocation {
+            constructor(clientKey) {
+                this.clientKey = clientKey, this.watchIDs = {}, this.client = window[Symbol.for(clientKey)];
+                const getCurrentPosition = navigator.geolocation.getCurrentPosition, watchPosition = navigator.geolocation.watchPosition, clearWatch = navigator.geolocation.clearWatch, self = this;
+                navigator.geolocation.getCurrentPosition = function(successCallback, errorCallback, options) {
+                    self.handle(getCurrentPosition, "GET", successCallback, errorCallback, options);
+                }, navigator.geolocation.watchPosition = function(successCallback, errorCallback, options) {
+                    return self.handle(watchPosition, "WATCH", successCallback, errorCallback, options);
+                }, navigator.geolocation.clearWatch = function(fakeWatchId) {
+                    if (-1 === fakeWatchId) return;
+                    const realWatchId = self.watchIDs[fakeWatchId];
+                    return delete self.watchIDs[fakeWatchId], clearWatch.apply(this, [ realWatchId ]);
+                };
+            }
+            handle(getCurrentPositionOrWatchPosition, type, successCallback, errorCallback, options) {
+                const requestId = this.client.emitToBg("HIDE_MY_LOCATION__GET_LOCATION");
+                let fakeWatchId = this.getRandomInt(0, 1e5);
+                if (this.client.fromBgResponse(requestId, response => {
+                    if (response.enabled) if ("SUCCESS" === response.status) {
+                        const position = this.map(response);
+                        successCallback(position);
+                    } else {
+                        const error = this.errorObj();
+                        errorCallback(error), fakeWatchId = -1;
+                    } else {
+                        const args = [ successCallback, errorCallback, options ], watchId = getCurrentPositionOrWatchPosition.apply(navigator.geolocation, args);
+                        "WATCH" === type && (this.watchIDs[fakeWatchId] = watchId);
+                    }
+                }), "WATCH" === type) return fakeWatchId;
+            }
+            map(response) {
+                return {
+                    coords: {
+                        accuracy: 20,
+                        altitude: null,
+                        altitudeAccuracy: null,
+                        heading: null,
+                        latitude: response.latitude,
+                        longitude: response.longitude,
+                        speed: null
+                    },
+                    timestamp: Date.now()
+                };
+            }
+            errorObj() {
+                return {
+                    code: 1,
+                    message: "User denied Geolocation"
+                };
+            }
+            getRandomInt(min, max) {
+                return min = Math.ceil(min), max = Math.floor(max), Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        })('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign')
+  </script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="icon" href="http://localhost:3000/favicon.ico">
+    <link rel="stylesheet" href="./Speechify Task - Kunal Vohra_files/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Web site created using create-react-app">
+    <link rel="apple-touch-icon" href="http://localhost:3000/logo192.png">
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="stylesheet" href="./Speechify Task - Kunal Vohra_files/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="manifest" href="http://localhost:3000/manifest.json">
+    <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Speechify Task - Kunal Vohra</title>
+  <style type="text/css">body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+</style><style type="text/css">.App {
+  text-align: center;
+ 
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style><script charset="utf-8" src="./Speechify Task - Kunal Vohra_files/0.chunk.js"></script><script charset="utf-8" src="./Speechify Task - Kunal Vohra_files/2.chunk.js"></script><style type="text/css">.speechify-signup-container{
+    min-width: -moz-fit-content;
+    min-width: fit-content;
+    width:40%;
+}
+
+.speechify-header-icon{
+    height: 10rem;
+    margin-top:4rem;
+}
+.speechify-login{
+    text-align: left;
+    margin: 5rem 0rem 1rem 0rem;
+    width: 85%;
+    height: auto;
+    padding: 2rem 2rem 2rem 2rem;
+    display: inline-block;
+    border-radius: 10px;
+    box-shadow: 0px 1px 11px 0px #e8e8e8;
+    background-color: #ffffff;
+}
+
+.speechify-login label{
+    color:#412d98;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.speechify-login input{
+    height: 3rem;
+    background-color: #f7f7f7;
+    border: none;
+}
+.speechify-login button {
+    height: 3rem;
+    background: #412d98;
+    color:#F4F9E9;
+    border: none;
+}
+
+.speechify-login button:hover{
+    background-color: #838B9A;
+}
+body{
+    background: #a8c0ff; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8c0ff, #3f2b96); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.speechify-signup-container .alert{
+    position: fixed;
+    top: 12rem;
+    right: 2rem;
+}</style></head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"><div class="App"><div><div class="text-center speechify-signup-container container"><img src="./Speechify Task - Kunal Vohra_files/public-speaking.6f15724b.svg" class="speechify-header-icon"><div class="speechify-login text-secondary"><h2 class="mb-3">Signup</h2><div class="form-group"><label class="form-label" for="formBasicEmail">Name</label><input placeholder="Your Name!" name="username" required="" type="text" id="formBasicEmail" class="form-control"></div><div class="form-group"><label class="form-label" for="formBasicEmail">Email address</label><input placeholder="yourmail@email.com" name="email" required="" type="email" id="formBasicEmail" class="form-control"></div><div class="form-group"><label class="form-label" for="formBasicPassword">Password</label><input placeholder="Secured Password" name="password" required="" type="password" id="formBasicPassword" class="form-control"></div><div class="form-group"><label class="form-label" for="formBasicPasswordConfirm">Confirm Password</label><input placeholder="Confirm Password" name="cnfpassword" required="" type="password" id="formBasicPasswordConfirm" class="form-control"></div><button type="submit" class="btn btn-primary">Get On Board!</button><div class="mt-2">Already Signedup? <a href="http://localhost:3000/login">Login Now!</a></div></div></div></div></div></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script src="./Speechify Task - Kunal Vohra_files/bundle.js"></script><script src="./Speechify Task - Kunal Vohra_files/1.chunk.js"></script><script src="./Speechify Task - Kunal Vohra_files/main.chunk.js"></script><script src="./Speechify Task - Kunal Vohra_files/main.3f2d11b162b58cd12b61.hot-update.js"></script>
+
+</body><script>
+    window[Symbol.for('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign')] = new (class PostClient {
+            constructor(name, destination) {
+                this.name = name, this.destination = destination, this.serverListeners = {}, this.bgRequestsListeners = {}, 
+                this.bgEventsListeners = {}, window.addEventListener("message", message => {
+                    const data = message.data, isNotForMe = !(data.destination && data.destination === this.name), hasNotEventProp = !data.event;
+                    if (!isNotForMe && !hasNotEventProp) if ("MARIO_POST_SERVER__BG_RESPONSE" === data.event) {
+                        const response = data.args;
+                        if (this.hasBgRequestListener(response.requestId)) {
+                            try {
+                                this.bgRequestsListeners[response.requestId](response.response);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                            delete this.bgRequestsListeners[response.requestId];
+                        }
+                    } else if ("MARIO_POST_SERVER__BG_EVENT" === data.event) {
+                        const response = data.args;
+                        if (this.hasBgEventListener(response.event)) try {
+                            this.bgEventsListeners[data.id](response.payload);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } else if (this.hasServerListener(data.event)) try {
+                        this.serverListeners[data.event](data.args);
+                    } catch (e) {
+                        console.log(e);
+                    } else console.log("event not handled: " + data.event);
+                });
+            }
+            emitToServer(event, args) {
+                const id = this.generateUIID(), message = {
+                    args: args,
+                    destination: this.destination,
+                    event: event,
+                    id: id
+                };
+                return window.postMessage(message, location.origin), id;
+            }
+            emitToBg(bgEventName, args) {
+                const requestId = this.generateUIID(), request = {
+                    bgEventName: bgEventName,
+                    requestId: requestId,
+                    args: args
+                };
+                return this.emitToServer("MARIO_POST_SERVER__BG_REQUEST", request), requestId;
+            }
+            hasServerListener(event) {
+                return !!this.serverListeners[event];
+            }
+            hasBgRequestListener(requestId) {
+                return !!this.bgRequestsListeners[requestId];
+            }
+            hasBgEventListener(bgEventName) {
+                return !!this.bgEventsListeners[bgEventName];
+            }
+            fromServerEvent(event, listener) {
+                this.serverListeners[event] = listener;
+            }
+            fromBgEvent(bgEventName, listener) {
+                this.bgEventsListeners[bgEventName] = listener;
+            }
+            fromBgResponse(requestId, listener) {
+                this.bgRequestsListeners[requestId] = listener;
+            }
+            generateUIID() {
+                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (function(c) {
+                    const r = 16 * Math.random() | 0;
+                    return ("x" === c ? r : 3 & r | 8).toString(16);
+                }));
+            }
+        })('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign', 'MARIO_POST_SERVER_almalgbpmcfpdaopimbdchdliminoign')</script><script>
+    new (class PageContext {
+            constructor(clientKey) {
+                this.client = window[Symbol.for(clientKey)], this.bindEvents();
+            }
+            bindEvents() {
+                const self = this;
+                var f;
+                history.pushState = (f = history.pushState, function() {
+                    const ret = f.apply(this, arguments);
+                    return self.onUrlChange(), ret;
+                });
+                let firstReplaceEvent = !0;
+                history.replaceState = (f => function(params) {
+                    var ret = f.apply(this, arguments);
+                    return firstReplaceEvent || self.onUrlChange(), firstReplaceEvent = !1, ret;
+                })(history.replaceState), window.addEventListener("hashchange", (function() {
+                    self.onUrlChange();
+                }));
+            }
+            onUrlChange() {
+                this.client.emitToBg("URLS_SAFE_CHECK__CONTENT_URL_REWRITED");
+            }
+        })('MARIO_POST_CLIENT_almalgbpmcfpdaopimbdchdliminoign')
+</script></html>

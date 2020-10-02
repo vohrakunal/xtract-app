@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { Container, Form, Button, Image, Alert } from 'react-bootstrap';
 
-import "../assets/css/signup.css";
+import "../assets/css/auth.css";
 
 import SpeechIcon from "../assets/icons/public-speaking.svg";
 
@@ -27,7 +27,6 @@ class Signup extends React.Component {
 
     signupFormUpdate = (e) => {
         this.setState({ [e.target.name]: e.target.value });
-        console.log(this.state);
     }
 
     onBtnClick = async() => {
@@ -62,11 +61,11 @@ class Signup extends React.Component {
     render() {
         return (
             <div>
-                <Container className="text-center speechify-signup-container">
+                <Container className="text-center speechify-auth-container">
                     {this.messageBox()}
                     <Image className="speechify-header-icon" src={SpeechIcon}/>
 
-                <div className="speechify-login text-secondary">
+                <div className="speechify-auth text-secondary">
                     <h2 className="mb-3">Signup</h2>
 
                         <Form.Group controlId="formBasicEmail">
@@ -90,7 +89,7 @@ class Signup extends React.Component {
                         <Button variant="primary" type="submit" onClick={()=>this.onBtnClick()}>
                             Get On Board!
                         </Button>
-                        <div class="mt-2">
+                        <div className="mt-2">
                             Already Signedup? <Link to="/login">Login Now!</Link>
                         </div>
                     

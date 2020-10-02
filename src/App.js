@@ -14,6 +14,8 @@ const Signup = lazy(() => import('./views/Signup'));
 
 const Login = lazy(() => import('./views/Login'));
 
+const Dashboard = lazy(() => import('./views/Dashboard'));
+
 
 function App() {
   const location = useLocation();
@@ -34,8 +36,12 @@ function App() {
       protected:false,
 
     },
-    
-
+    {
+      pageLink:'/user/dashboard',
+      view:Dashboard,
+      displayName: 'Dashboard',
+      protected:true
+    }
   ]
   
   
