@@ -68,12 +68,12 @@ function DashBoard() {
         fetchData();
     }, []);
 
-    const uploadFile = () => {
+    const uploadFile = async () => {
         const formData = new FormData();
 
         formData.append('file', file);
 
-        axios({
+        await axios({
             method: 'post',
             url: process.env.REACT_APP_SERVER_IP + process.env.REACT_APP_SERVER_VERSION + "/fileupload/uploadfile",
             headers: {
@@ -83,7 +83,7 @@ function DashBoard() {
         }).then(res => {
             setTextAreaValue(textAreaValue + res.data.data.text)
         }).catch(err => console.log(err))
-
+        await fetchData();
     }
 
     const clearAreaData = async() =>{
@@ -152,7 +152,7 @@ function DashBoard() {
                             </h4>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Upload a File</Form.Label>
-                                <Form.File type="file" ref={inpRef} onChange={handleChange} />
+                                <Form.File type="file" ref={inpRef} onChange={handleChange}/>
                             </Form.Group>
                             <Button variant="primary" type="submit" onClick={uploadFile}>
                                 Upload
