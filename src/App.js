@@ -16,6 +16,8 @@ const Login = lazy(() => import('./views/Login'));
 
 const Dashboard = lazy(() => import('./views/Dashboard'));
 
+const Logout = lazy(() => import('./views/Logout'));
+
 
 function App() {
   const location = useLocation();
@@ -40,6 +42,12 @@ function App() {
       pageLink:'/user/dashboard',
       view:Dashboard,
       displayName: 'Dashboard',
+      protected:true
+    },
+    {
+      pageLink:'/user/logout',
+      view:Logout,
+      displayName: 'logout',
       protected:true
     }
   ]

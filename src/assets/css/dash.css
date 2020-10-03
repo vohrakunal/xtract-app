@@ -1,3 +1,14 @@
+.speechify-navbar{
+    background-color: #2e2651 !important;
+    position:relative;
+
+}
+/* .speechify-navbar .navbar-brand {
+    transform: translateX(-50%);
+    left: 50%;
+    position: relative;
+  } */
+
 .speechify-dash-component{
     min-width: fit-content;
     width:80%;
@@ -9,11 +20,15 @@
     font-weight: 500;
     font-size: 1.2rem;
 }
-/* .speechify-dash-component input{
+.speechify-dash-component input{
     height: 3rem;
     background-color: #f7f7f7;
     border: none;
-} */
+}
+
+body{
+    background: #f7f6fb !important;
+}
 .speechify-dash-component button {
     height: rem;
     background: #412d98;
@@ -62,10 +77,4 @@
     -moz-box-shadow: 0px 1px 11px 0px #f1f1f1;
     box-shadow: 0px 1px 11px 0px #f0f0f0;
     background-color: #ffffff;
-}
-
-body{
-    background: #a8c0ff; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #a8c0ff, #3f2b96); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #a8c0ff, #3f2b96); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
